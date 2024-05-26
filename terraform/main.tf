@@ -43,6 +43,13 @@ resource "yandex_compute_instance" "vm1-nginx1" {
   }
 }
 
+#Виртуальная машина №2 для nginx2
+#Виртуальная машина №3 для zabbix
+#Виртуальная машина №4 для elasticsearch
+#Виртуальная машина №5 для kibana
+#Виртуальная машина №6 для bastion-loadbalancer
+
+#СЕТИ - НАДО ПРАВИТЬ
 #надо править
 resource "yandex_vpc_network" "network-1" {
   name = "network1"
@@ -65,4 +72,3 @@ output "internal_ip_address_vm1-nginx1" {
 output "external_ip_address_vm1-nginx1" {
   value = yandex_compute_instance.vm1-nginx1.network_interface.0.nat_ip_address
 }
-

@@ -16,8 +16,9 @@ provider "yandex" {
 
 #Виртуальная машина №1 для nginx1
 resource "yandex_compute_instance" "vm1-nginx1" {
-  name = "vm1-nginx1"
-  zone = "ru-central1-a" #добавил я
+  name     = "vm1-nginx1"
+  hostname = "vm1-nginx1"
+  zone     = "ru-central1-a"
 
   resources {
     core_fraction = 5 #это параметр прерываемости машины, например 5 - это 5 процентов.
@@ -33,10 +34,10 @@ resource "yandex_compute_instance" "vm1-nginx1" {
     }
   }
 
-  #надо править
+  #Эта машина в приватной сети
   network_interface {
     subnet_id = yandex_vpc_subnet.subnet-1.id
-    nat       = true
+    nat       = false #фолс чтобы не натил
   }
 
   metadata = {
@@ -46,8 +47,9 @@ resource "yandex_compute_instance" "vm1-nginx1" {
 
 #Виртуальная машина №2 для nginx2
 resource "yandex_compute_instance" "vm2-nginx2" {
-  name = "vm2-nginx2"
-  zone = "ru-central1-b" #добавил я
+  name     = "vm2-nginx2"
+  hostname = "vm2-nginx2"
+  zone     = "ru-central1-b"
 
   resources {
     core_fraction = 5 #это параметр прерываемости машины, например 5 - это 5 процентов.
@@ -63,10 +65,10 @@ resource "yandex_compute_instance" "vm2-nginx2" {
     }
   }
 
-  #надо править
+  #Эта машина в приватной сети
   network_interface {
     subnet_id = yandex_vpc_subnet.subnet-1.id
-    nat       = true
+    nat       = false #фолс чтобы не натил
   }
 
   metadata = {
@@ -76,7 +78,8 @@ resource "yandex_compute_instance" "vm2-nginx2" {
 
 #Виртуальная машина №3 для zabbix
 resource "yandex_compute_instance" "vm3-zabbix" {
-  name = "vm3-zabbix"
+  name     = "vm3-zabbix"
+  hostname = "vm3-zabbix"
   #zone = "ru-central1-a" #добавил я
 
   resources {
@@ -93,7 +96,7 @@ resource "yandex_compute_instance" "vm3-zabbix" {
     }
   }
 
-  #надо править
+  #эта машина должна быть и в приватной и в публичной сети
   network_interface {
     subnet_id = yandex_vpc_subnet.subnet-1.id
     nat       = true
@@ -106,7 +109,8 @@ resource "yandex_compute_instance" "vm3-zabbix" {
 
 #Виртуальная машина №4 для elasticsearch
 resource "yandex_compute_instance" "vm4-elasticsearch" {
-  name = "vm4-elasticsearch"
+  name     = "vm4-elasticsearch"
+  hostname = "vm4-elasticsearch"
   #zone = "ru-central1-a" #добавил я
 
   resources {
@@ -123,10 +127,10 @@ resource "yandex_compute_instance" "vm4-elasticsearch" {
     }
   }
 
-  #надо править
+  #Эта машина в приватной сети
   network_interface {
     subnet_id = yandex_vpc_subnet.subnet-1.id
-    nat       = true
+    nat       = false #фолс чтобы не натила
   }
 
   metadata = {
@@ -137,7 +141,8 @@ resource "yandex_compute_instance" "vm4-elasticsearch" {
 
 #Виртуальная машина №5 для kibana
 resource "yandex_compute_instance" "vm5-kibana" {
-  name = "vm5-kibana"
+  name     = "vm5-kibana"
+  hostname = "vm5-kibana"
   #zone = "ru-central1-a" #добавил я
 
   resources {
@@ -154,7 +159,7 @@ resource "yandex_compute_instance" "vm5-kibana" {
     }
   }
 
-  #надо править
+  #эта машина должна быть и в приватной и в публичной сети
   network_interface {
     subnet_id = yandex_vpc_subnet.subnet-1.id
     nat       = true
@@ -168,7 +173,8 @@ resource "yandex_compute_instance" "vm5-kibana" {
 
 #Виртуальная машина №6 для bastion
 resource "yandex_compute_instance" "vm6-bastion" {
-  name = "vm6-bastion"
+  name     = "vm6-bastion"
+  hostname = "vm6-bastion"
   #zone = "ru-central1-a" #добавил я
 
   resources {
@@ -185,7 +191,7 @@ resource "yandex_compute_instance" "vm6-bastion" {
     }
   }
 
-  #надо править
+  #эта машина должна быть и в приватной и в публичной сети
   network_interface {
     subnet_id = yandex_vpc_subnet.subnet-1.id
     nat       = true
@@ -198,7 +204,8 @@ resource "yandex_compute_instance" "vm6-bastion" {
 
 #Виртуальная машина №7 для loadbalancer
 resource "yandex_compute_instance" "vm7-loadbalancer" {
-  name = "vm7-loadbalancer"
+  name     = "vm7-loadbalancer"
+  hostname = "vm7-loadbalancer"
   #zone = "ru-central1-a" #добавил я
 
   resources {
@@ -215,7 +222,7 @@ resource "yandex_compute_instance" "vm7-loadbalancer" {
     }
   }
 
-  #надо править
+  #эта машина должна быть и в приватной и в публичной сети
   network_interface {
     subnet_id = yandex_vpc_subnet.subnet-1.id
     nat       = true
@@ -227,13 +234,11 @@ resource "yandex_compute_instance" "vm7-loadbalancer" {
 }
 
 
-#СЕТИ - НАДО ПРАВИТЬ
-#надо править
+#СЕТИ
 resource "yandex_vpc_network" "network-1" {
   name = "network-1"
 }
 
-#надо править
 resource "yandex_vpc_subnet" "subnet-1" {
   name           = "subnet-1"
   zone           = "ru-central1-a"
@@ -241,12 +246,58 @@ resource "yandex_vpc_subnet" "subnet-1" {
   v4_cidr_blocks = ["192.168.10.0/24"]
 }
 
-#надо править
+#АУТПУТЫ
+
 output "internal_ip_address_vm1-nginx1" {
   value = yandex_compute_instance.vm1-nginx1.network_interface.0.ip_address
 }
 
-#надо править
 output "external_ip_address_vm1-nginx1" {
   value = yandex_compute_instance.vm1-nginx1.network_interface.0.nat_ip_address
+}
+
+output "internal_ip_address_vm2-nginx2" {
+  value = yandex_compute_instance.vm2-nginx2.network_interface.0.ip_address
+}
+
+output "external_ip_address_vm2-nginx2" {
+  value = yandex_compute_instance.vm2-nginx2.network_interface.0.nat_ip_address
+}
+output "internal_ip_address_vm3-zabbix" {
+  value = yandex_compute_instance.vm3-zabbix.network_interface.0.ip_address
+}
+
+output "external_ip_address_vm3-zabbix" {
+  value = yandex_compute_instance.vm3-zabbix.network_interface.0.nat_ip_address
+}
+
+output "internal_ip_address_vm4-elasticsearch" {
+  value = yandex_compute_instance.vm4-elasticsearch.network_interface.0.ip_address
+}
+
+output "external_ip_address_vm4-elasticsearch" {
+  value = yandex_compute_instance.vm4-elasticsearch.network_interface.0.nat_ip_address
+}
+output "internal_ip_address_vm5-kibana" {
+  value = yandex_compute_instance.vm5-kibana.network_interface.0.ip_address
+}
+
+output "external_ip_address_vm5-kibana" {
+  value = yandex_compute_instance.vm5-kibana.network_interface.0.nat_ip_address
+}
+
+output "internal_ip_address_vm6-bastion" {
+  value = yandex_compute_instance.vm6-bastion.network_interface.0.ip_address
+}
+
+output "external_ip_address_vm6-bastion" {
+  value = yandex_compute_instance.vm6-bastion.network_interface.0.nat_ip_address
+}
+
+output "internal_ip_address_vm7-loadbalancer" {
+  value = yandex_compute_instance.vm7-loadbalancer.network_interface.0.ip_address
+}
+
+output "external_ip_address_vm7-loadbalancer" {
+  value = yandex_compute_instance.vm7-loadbalancer.network_interface.0.nat_ip_address
 }

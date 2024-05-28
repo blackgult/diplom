@@ -17,8 +17,7 @@ provider "yandex" {
 #Виртуальная машина №1 для nginx1
 resource "yandex_compute_instance" "vm1-nginx1" {
   name = "vm1-nginx1"
-  #zone = "ru-central1-a" #добавил я
- 
+  zone = "ru-central1-a" #добавил я
 
   resources {
     core_fraction = 5 #это параметр прерываемости машины, например 5 - это 5 процентов.
@@ -29,6 +28,8 @@ resource "yandex_compute_instance" "vm1-nginx1" {
   boot_disk {
     initialize_params {
       image_id = "fd88m3uah9t47loeseir"
+      size     = 10
+      type     = "network-hdd"
     }
   }
 
@@ -44,15 +45,192 @@ resource "yandex_compute_instance" "vm1-nginx1" {
 }
 
 #Виртуальная машина №2 для nginx2
+resource "yandex_compute_instance" "vm2-nginx2" {
+  name = "vm2-nginx2"
+  zone = "ru-central1-b" #добавил я
+
+  resources {
+    core_fraction = 5 #это параметр прерываемости машины, например 5 - это 5 процентов.
+    cores         = 2
+    memory        = 2
+  }
+
+  boot_disk {
+    initialize_params {
+      image_id = "fd88m3uah9t47loeseir"
+      size     = 10
+      type     = "network-hdd"
+    }
+  }
+
+  #надо править
+  network_interface {
+    subnet_id = yandex_vpc_subnet.subnet-1.id
+    nat       = true
+  }
+
+  metadata = {
+    user-data = "${file("./meta.yml")}"
+  }
+}
+
 #Виртуальная машина №3 для zabbix
+resource "yandex_compute_instance" "vm3-zabbix" {
+  name = "vm3-zabbix"
+  #zone = "ru-central1-a" #добавил я
+
+  resources {
+    core_fraction = 5 #это параметр прерываемости машины, например 5 - это 5 процентов.
+    cores         = 2
+    memory        = 2
+  }
+
+  boot_disk {
+    initialize_params {
+      image_id = "fd88m3uah9t47loeseir"
+      size     = 10
+      type     = "network-hdd"
+    }
+  }
+
+  #надо править
+  network_interface {
+    subnet_id = yandex_vpc_subnet.subnet-1.id
+    nat       = true
+  }
+
+  metadata = {
+    user-data = "${file("./meta.yml")}"
+  }
+}
+
 #Виртуальная машина №4 для elasticsearch
+resource "yandex_compute_instance" "vm4-elasticsearch" {
+  name = "vm4-elasticsearch"
+  #zone = "ru-central1-a" #добавил я
+
+  resources {
+    core_fraction = 5 #это параметр прерываемости машины, например 5 - это 5 процентов.
+    cores         = 2
+    memory        = 2
+  }
+
+  boot_disk {
+    initialize_params {
+      image_id = "fd88m3uah9t47loeseir"
+      size     = 10
+      type     = "network-hdd"
+    }
+  }
+
+  #надо править
+  network_interface {
+    subnet_id = yandex_vpc_subnet.subnet-1.id
+    nat       = true
+  }
+
+  metadata = {
+    user-data = "${file("./meta.yml")}"
+  }
+}
+
+
 #Виртуальная машина №5 для kibana
-#Виртуальная машина №6 для bastion-loadbalancer
+resource "yandex_compute_instance" "vm5-kibana" {
+  name = "vm5-kibana"
+  #zone = "ru-central1-a" #добавил я
+
+  resources {
+    core_fraction = 5 #это параметр прерываемости машины, например 5 - это 5 процентов.
+    cores         = 2
+    memory        = 2
+  }
+
+  boot_disk {
+    initialize_params {
+      image_id = "fd88m3uah9t47loeseir"
+      size     = 10
+      type     = "network-hdd"
+    }
+  }
+
+  #надо править
+  network_interface {
+    subnet_id = yandex_vpc_subnet.subnet-1.id
+    nat       = true
+  }
+
+  metadata = {
+    user-data = "${file("./meta.yml")}"
+  }
+}
+
+
+#Виртуальная машина №6 для bastion
+resource "yandex_compute_instance" "vm6-bastion" {
+  name = "vm6-bastion"
+  #zone = "ru-central1-a" #добавил я
+
+  resources {
+    core_fraction = 5 #это параметр прерываемости машины, например 5 - это 5 процентов.
+    cores         = 2
+    memory        = 2
+  }
+
+  boot_disk {
+    initialize_params {
+      image_id = "fd88m3uah9t47loeseir"
+      size     = 10
+      type     = "network-hdd"
+    }
+  }
+
+  #надо править
+  network_interface {
+    subnet_id = yandex_vpc_subnet.subnet-1.id
+    nat       = true
+  }
+
+  metadata = {
+    user-data = "${file("./meta.yml")}"
+  }
+}
+
+#Виртуальная машина №7 для loadbalancer
+resource "yandex_compute_instance" "vm7-loadbalancer" {
+  name = "vm7-loadbalancer"
+  #zone = "ru-central1-a" #добавил я
+
+  resources {
+    core_fraction = 5 #это параметр прерываемости машины, например 5 - это 5 процентов.
+    cores         = 2
+    memory        = 2
+  }
+
+  boot_disk {
+    initialize_params {
+      image_id = "fd88m3uah9t47loeseir"
+      size     = 10
+      type     = "network-hdd"
+    }
+  }
+
+  #надо править
+  network_interface {
+    subnet_id = yandex_vpc_subnet.subnet-1.id
+    nat       = true
+  }
+
+  metadata = {
+    user-data = "${file("./meta.yml")}"
+  }
+}
+
 
 #СЕТИ - НАДО ПРАВИТЬ
 #надо править
 resource "yandex_vpc_network" "network-1" {
-  name = "network1"
+  name = "network-1"
 }
 
 #надо править

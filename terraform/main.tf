@@ -202,7 +202,7 @@ resource "yandex_compute_instance" "vm6-bastion" {
   }
 }
 
-#Виртуальная машина №7 для loadbalancer
+#Виртуальная машина №7 для loadbalancer ЭТО Я УДАЛЮ, НАСТРОЮ ЧЕРЕЗ ЯНДЕКС КЛАУД.
 resource "yandex_compute_instance" "vm7-loadbalancer" {
   name     = "vm7-loadbalancer"
   hostname = "vm7-loadbalancer"

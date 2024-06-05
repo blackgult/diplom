@@ -1,0 +1,84 @@
+- hosts: web
+  remote_user: dmitrym
+  become: true
+
+  tasks:
+   - name: Update package cache
+     apt: update_cache=yes
+
+   - name: Install nginx
+     become: true
+     apt:
+       name: nginx
+       state: present
+       update_cache: yes
+       cache_valid_time: 3600
+
+   - service:
+        name: nginx
+        state: started
+     become: yes
+     become_method: sudo
+
+#Установка заббикс сервера
+
+- hosts: zabbix-server
+  tasks:
+    - name: Install Zabbix server
+      become: yes
+      apt:
+        name: zabbix-server
+        state: present
+
+    - name: Install Zabbix agent
+      become: yes
+      apt:
+        name: zabbix-agent
+        state: present
+
+- hosts: zabbix-server
+  tasks:
+    - name: Install PostgreSQL
+      become: yes
+      apt:
+        name: postgresql
+        state: present
+
+    - name: Create database for Zabbix
+      become: yes
+      postgresql_db:
+        name: zabbix
+        state: present
+
+    - name: Create user for Zabbix
+      become: yes
+      postgresql_user:
+        db: zabbix
+        name: zabbix
+        password: zabbixpassword
+
+    - name: Applying a Database Schema Zabbix
+      become: yes
+      command: psql -U zabbix -d zabbix -f /usr/share/doc/zabbix-server-pgsql*/create.sql
+
+    - name: Enabling the PostreSQL extension for Zabbix server
+      become: yes
+      command: psql -U zabbix -d zabbix -c "CREATE EXTENSION IF NOT EXISTS pgcrypto;"
+
+    - name: Configuring Zabbix server to use PostgreSQL
+      become: yes
+      lineinfile:
+        path: /etc/zabbix/zabbix_server.conf
+        line: "{{ item }}"
+        state: present
+      with_items:
+        - 'DBHost=localhost'
+        - 'DBName=zabbix'
+        - 'DBUser=zabbix'
+        - 'DBPassword=zabbixpassword'
+
+    - name: Restarting Zabbix server
+      become: yes
+      service:
+        name: zabbix-server
+        state: restarted

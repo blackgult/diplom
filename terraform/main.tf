@@ -322,10 +322,7 @@ resource "yandex_alb_load_balancer" "network-load-balancer" {
   }
 }
 
-
-###############################
 # Security Groups
-
 # For bastion
 
 resource "yandex_vpc_security_group" "group-vm6-bastion" {
@@ -437,7 +434,7 @@ resource "yandex_vpc_security_group" "group-elasticsearch" {
   }
 }
 
-# Security group public network kibana
+# Security group kibana
 resource "yandex_vpc_security_group" "group-kibana" {
   name       = "Security group kibana"
   network_id = yandex_vpc_network.network-1.id
@@ -455,9 +452,9 @@ resource "yandex_vpc_security_group" "group-kibana" {
   }
 }
 
-# Security group public application load balancer
+# Security group load balancer
 resource "yandex_vpc_security_group" "group-public-network-alb" {
-  name       = "My security group public network application load balancer"
+  name       = "Security group load balancer"
   network_id = yandex_vpc_network.network-1.id
 
   ingress {
@@ -474,8 +471,6 @@ resource "yandex_vpc_security_group" "group-public-network-alb" {
     to_port        = 65535
   }
 }
-
-##################################
 
 #АУТПУТЫ
 

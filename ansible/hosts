@@ -1,15 +1,7 @@
-[nginx] 
-vm1-nginx1 ansible_host="{{ lookup('ansible.builtin.env', 'INTERNAL_IP_VM1_NGINX1') }}" hostname=vm1-nginx1
-vm2-nginx2 ansible_host="{{ lookup('ansible.builtin.env', 'INTERNAL_IP_VM2_NGINX2') }}" hostname=vm2-nginx2
+[web] 
 
 [zabbix]  
-vm3-zabbix-server ansible_host="{{ lookup('ansible.builtin.env', 'INTERNAL_IP_VM3_ZABBIX_SERVER') }}" hostname=vm3-zabbix-server
 
 [elasticsearch]
-vm4-elasticsearch ansible_host="{{ lookup('ansible.builtin.env', 'INTERNAL_IP_VM4_ELASTICSEARCH') }}" hostname=vm4-elasticsearch
 
 [kibana]
-vm5-kibana ansible_host="{{ lookup('ansible.builtin.env', 'INTERNAL_IP_VM5_KIBANA') }}" hostname=vm5-kibana
-
-[bastion]
-vm6-bastion ansible_host="{{ lookup('ansible.builtin.env', 'EXTERNAL_IP_VM6_BASTION') }}" hostname=vm6-bastion 

@@ -68,7 +68,7 @@ resource "yandex_compute_instance" "vm2-nginx2" {
 
   #Эта машина в приватной сети
   network_interface {
-    subnet_id          = yandex_vpc_subnet.subnet-1.id
+    subnet_id          = yandex_vpc_subnet.subnet-2.id
     nat                = false #фолс чтобы не натил
     security_group_ids = [yandex_vpc_security_group.group-ssh-traffic.id, yandex_vpc_security_group.group-vm1-vm2.id]
   }
@@ -221,7 +221,7 @@ resource "yandex_vpc_subnet" "subnet-1" {
 }
 
 resource "yandex_vpc_subnet" "subnet-2" {
-  name           = "subnet2"
+  name           = "subnet-2"
   zone           = "ru-central1-b"
   network_id     = yandex_vpc_network.network-1.id
   v4_cidr_blocks = ["192.168.20.0/24"]
@@ -519,3 +519,32 @@ output "internal_ip_address_vm6-bastion" {
 output "external_ip_address_vm6-bastion" {
   value = yandex_compute_instance.vm6-bastion.network_interface.0.nat_ip_address
 }
+
+#СНАПШОТЫ ДИСКОВ
+# resource "yandex_compute_snapshot_schedule" "default" {
+#   name           = "snapshot"
+
+#   schedule_policy {
+#   expression = "0 0 ? * *"
+#   }
+
+#   snapshot_count = 7
+
+#   snapshot_spec {
+#     description = "snapshot-description"
+#     labels = {
+#       snapshot-label = "my-snapshot-label-value"
+#     }
+#   }
+
+#   labels = {
+#     my-label = "my-label-value"
+#   }
+
+#   disk_ids = [yandex_compute_instance.vm1-nginx1.boot_disk.0.disk_id,
+#               yandex_compute_instance.vm2-nginx2.boot_disk.0.disk_id,
+#               yandex_compute_instance.vm3-zabbix-server.boot_disk.0.disk_id,
+#               yandex_compute_instance.vm4-elasticsearch.boot_disk.0.disk_id,
+#               yandex_compute_instance.vm5-kibana.boot_disk.0.disk_id,
+#               yandex_compute_instance.vm6-bastion.boot_disk.0.disk_id]
+# }

@@ -7,7 +7,7 @@
   apt:
     name: nginx
     state: present
-    update_cache: yes
+    update_cache: true
     cache_valid_time: 3600
 
 - name: nginx enable
@@ -21,7 +21,7 @@
   apt:
     name: ufw
     state: present
-    update_cache: yes
+    update_cache: true
     cache_valid_time: 3600
 
 - name: Enable UFW
@@ -49,12 +49,11 @@
 
 - name: Change index.html file
   template:
-    src: /home/dmitrym/diplom/ansible/roles/web/templates/index.j2
+    src: /home/dmitrym/diplom/ansible/roles/web/templates/index.html.j2
     dest: /var/www/html/index.html
     mode: 0555
   notify: Restart nginx
-  
+#
 # - name: Check that you can connect (GET) to a page and it returns a status 200
 #   ansible.builtin.uri:
 #     url: http://localhost
-

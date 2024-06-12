@@ -1,1 +1,60 @@
+---
+- name: Update package cache
+  apt: update_cache=yes
+
+- name: Install nginx
+  become: true
+  apt:
+    name: nginx
+    state: present
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: nginx enable
+  become: true
+  systemd:
+    name: nginx
+    enabled: true
+
+- name: Install ufw
+  become: true
+  apt:
+    name: ufw
+    state: present
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Enable UFW
+  become: true
+  ufw:
+    state: enabled
+
+- name: Allow HTTP
+  ufw:
+    rule: allow
+    port: http
+    proto: tcp
+    state: enabled
+
+- name: Allow all access to tcp port 80
+  ufw:
+    rule: allow
+    port: '80'
+    proto: tcp
+
+- name: Reloaded UFW
+  become: true
+  ufw:
+    state: reloaded
+
+- name: Change index.html file
+  template:
+    src: /home/dmitrym/diplom/ansible/roles/web/templates/index.j2
+    dest: /var/www/html/index.html
+    mode: 0555
+  notify: Restart nginx
+  
+# - name: Check that you can connect (GET) to a page and it returns a status 200
+#   ansible.builtin.uri:
+#     url: http://localhost
 

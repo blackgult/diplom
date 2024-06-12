@@ -1,0 +1,15 @@
+# - name: Update package cache
+#   apt:
+#     update_cache: yes
+
+- name: Install Zabbix Agent
+  apt:
+    name: zabbix-agent
+    state: present
+
+- name: Setting configure Zabbix Agent
+  template:
+    src: /home/dmitrym/diplom/ansible/roles/zabbix-server/templates/zabbix_agentd.conf.j2
+    dest: /etc/zabbix/zabbix_agentd.conf
+    mode: 0555
+  notify: restart zabbix-agent

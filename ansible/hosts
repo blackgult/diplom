@@ -1,7 +1,15 @@
-[web] 
+[web]
+    vm1-ngnix1 ansible_host=vm1-ngnix1.ru-central1.internal
+    vm2-ngnix2 ansible_host=vm2-nginx2.ru-central1.internal
 
-[zabbix]  
+[zabbix-server]
+    vm3-zabbix-server ansible_host=vm3-zabbix-server.ru-central1.internal
 
 [elasticsearch]
+    vm4-elasticsearch ansible_host=vm4-elasticsearch.ru-central1.internal
 
 [kibana]
+    vm5-kibana ansible_host=vm5-kibana.ru-central1.internal
+
+[bastion]
+    vm6-bastion ansible_host=vm6-bastion.ru-central1.internal

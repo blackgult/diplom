@@ -1,0 +1,37 @@
+---
+- name: deploy zabbix-server
+  hosts: zabbix-server
+  become: yes
+  vars:   
+    postgres_password: postgres
+  roles:
+    - zabbix-server
+
+- name: deploy elasticsearch
+  hosts: elasticsearch
+  become: yes
+  roles:
+    - elasticsearch
+
+- name: deploy kibana
+  hosts: kibana
+  become: yes
+  roles:
+    - kibana
+
+- name: deploy web servers
+  hosts: web
+  become: yes
+  roles:
+    - web
+    - filebeat
+ 
+- name: deploy zabbix-agent
+  hosts: 
+    - web
+    - elasticsearch
+    - kibana
+    - bastion
+  become: yes
+  roles:
+    - zabbix-agent

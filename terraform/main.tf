@@ -21,7 +21,7 @@ resource "yandex_compute_instance" "vm1-nginx1" {
   zone     = "ru-central1-a"
 
   resources {
-    core_fraction = 5 #это параметр прерываемости машины, например 5 - это 5 процентов.
+    core_fraction = 5
     cores         = 2
     memory        = 2
   }
@@ -32,6 +32,11 @@ resource "yandex_compute_instance" "vm1-nginx1" {
       size     = 10
       type     = "network-hdd"
     }
+  }
+
+  #Прерываемость машины, заккоментировать перед отправкой работы
+  scheduling_policy {
+    preemptible = true
   }
 
   #Эта машина в приватной сети
@@ -53,7 +58,7 @@ resource "yandex_compute_instance" "vm2-nginx2" {
   zone     = "ru-central1-b"
 
   resources {
-    core_fraction = 5 #это параметр прерываемости машины, например 5 - это 5 процентов.
+    core_fraction = 5
     cores         = 2
     memory        = 2
   }
@@ -64,6 +69,11 @@ resource "yandex_compute_instance" "vm2-nginx2" {
       size     = 10
       type     = "network-hdd"
     }
+  }
+
+  #Прерываемость машины, заккоментировать перед отправкой работы
+  scheduling_policy {
+    preemptible = true
   }
 
   #Эта машина в приватной сети
@@ -85,7 +95,7 @@ resource "yandex_compute_instance" "vm3-zabbix-server" {
   #zone = "ru-central1-a" #добавил я
 
   resources {
-    core_fraction = 5 #это параметр прерываемости машины, например 5 - это 5 процентов.
+    core_fraction = 5
     cores         = 2
     memory        = 2
   }
@@ -96,6 +106,11 @@ resource "yandex_compute_instance" "vm3-zabbix-server" {
       size     = 10
       type     = "network-hdd"
     }
+  }
+
+  #Прерываемость машины, заккоментировать перед отправкой работы
+  scheduling_policy {
+    preemptible = true
   }
 
   #эта машина должна быть и в приватной и в публичной сети
@@ -117,7 +132,7 @@ resource "yandex_compute_instance" "vm4-elasticsearch" {
   #zone = "ru-central1-a" #добавил я
 
   resources {
-    core_fraction = 5 #это параметр прерываемости машины, например 5 - это 5 процентов.
+    core_fraction = 5
     cores         = 2
     memory        = 2
   }
@@ -130,11 +145,17 @@ resource "yandex_compute_instance" "vm4-elasticsearch" {
     }
   }
 
+  #Прерываемость машины, заккоментировать перед отправкой работы
+  scheduling_policy {
+    preemptible = true
+  }
+
+
   #Эта машина в приватной сети
   network_interface {
     subnet_id          = yandex_vpc_subnet.subnet-1.id
     nat                = false #фолс чтобы не натила
-    security_group_ids = [yandex_vpc_security_group.group-ssh-traffic.id, yandex_vpc_security_group.group-elasticsearch.id]
+    security_group_ids = [yandex_vpc_security_group.group-ssh-traffic.id, yandex_vpc_security_group.group-elasticsearch.id, yandex_vpc_security_group.group-kibana.id]
   }
 
   metadata = {
@@ -150,7 +171,7 @@ resource "yandex_compute_instance" "vm5-kibana" {
   #zone = "ru-central1-a" #добавил я
 
   resources {
-    core_fraction = 5 #это параметр прерываемости машины, например 5 - это 5 процентов.
+    core_fraction = 5
     cores         = 2
     memory        = 2
   }
@@ -163,11 +184,16 @@ resource "yandex_compute_instance" "vm5-kibana" {
     }
   }
 
+  #Прерываемость машины, заккоментировать перед отправкой работы
+  scheduling_policy {
+    preemptible = true
+  }
+
   #эта машина должна быть и в приватной и в публичной сети
   network_interface {
     subnet_id          = yandex_vpc_subnet.subnet-1.id
     nat                = true
-    security_group_ids = [yandex_vpc_security_group.group-ssh-traffic.id, yandex_vpc_security_group.group-kibana.id]
+    security_group_ids = [yandex_vpc_security_group.group-ssh-traffic.id, yandex_vpc_security_group.group-kibana.id, yandex_vpc_security_group.group-elasticsearch.id]
   }
 
   metadata = {
@@ -183,7 +209,7 @@ resource "yandex_compute_instance" "vm6-bastion" {
   #zone = "ru-central1-a" #добавил я
 
   resources {
-    core_fraction = 5 #это параметр прерываемости машины, например 5 - это 5 процентов.
+    core_fraction = 5
     cores         = 2
     memory        = 2
   }
@@ -196,11 +222,16 @@ resource "yandex_compute_instance" "vm6-bastion" {
     }
   }
 
+  #Прерываемость машины, заккоментировать перед отправкой работы
+  scheduling_policy {
+    preemptible = true
+  }
+
   #эта машина должна быть и в приватной и в публичной сети
   network_interface {
     subnet_id          = yandex_vpc_subnet.subnet-1.id
     nat                = true
-    security_group_ids = [yandex_vpc_security_group.group-vm6-bastion.id]
+    security_group_ids = [yandex_vpc_security_group.group-vm6-bastion.id, yandex_vpc_security_group.group-ssh-traffic.id]
   }
 
   metadata = {
@@ -218,6 +249,7 @@ resource "yandex_vpc_subnet" "subnet-1" {
   zone           = "ru-central1-a"
   network_id     = yandex_vpc_network.network-1.id
   v4_cidr_blocks = ["192.168.10.0/24"]
+  route_table_id = yandex_vpc_route_table.route_table.id
 }
 
 resource "yandex_vpc_subnet" "subnet-2" {
@@ -225,6 +257,22 @@ resource "yandex_vpc_subnet" "subnet-2" {
   zone           = "ru-central1-b"
   network_id     = yandex_vpc_network.network-1.id
   v4_cidr_blocks = ["192.168.20.0/24"]
+  route_table_id = yandex_vpc_route_table.route_table.id
+}
+
+#Nat
+resource "yandex_vpc_gateway" "nat_gateway" {
+  name = "gateway"
+  shared_egress_gateway {}
+}
+
+resource "yandex_vpc_route_table" "route_table" {
+  network_id = yandex_vpc_network.network-1.id
+
+  static_route {
+    destination_prefix = "0.0.0.0/0"
+    gateway_id         = yandex_vpc_gateway.nat_gateway.id
+  }
 }
 
 #НАСТРОЙКИ БАЛАНСИРОВЩИКА
@@ -340,6 +388,18 @@ resource "yandex_vpc_security_group" "group-vm6-bastion" {
     to_port        = 65535
     v4_cidr_blocks = ["0.0.0.0/0"]
   }
+
+  ingress {
+    protocol          = "TCP"
+    port              = 22
+    security_group_id = yandex_vpc_security_group.group-ssh-traffic.id
+  }
+
+  egress {
+    protocol          = "TCP"
+    port              = 22
+    security_group_id = yandex_vpc_security_group.group-ssh-traffic.id
+  }
 }
 
 # Only incoming ssh traffic
@@ -358,6 +418,13 @@ resource "yandex_vpc_security_group" "group-ssh-traffic" {
     to_port        = 65535
     v4_cidr_blocks = ["192.168.10.0/24", "192.168.20.0/24"]
   }
+
+  egress {
+    protocol       = "ANY"
+    from_port      = 0
+    to_port        = 65535
+    v4_cidr_blocks = ["0.0.0.0/0"]
+  }
 }
 
 # For webservers vm1-nginx1 and vm2-nginx2 - group-vm1-vm2
@@ -366,27 +433,45 @@ resource "yandex_vpc_security_group" "group-vm1-vm2" {
   network_id = yandex_vpc_network.network-1.id
 
   ingress {
-    protocol       = "TCP"
+    protocol       = "ANY"
     port           = 80
-    v4_cidr_blocks = ["192.168.10.0/24", "192.168.20.0/24"]
+    v4_cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
-    protocol       = "TCP"
+    protocol       = "ANY"
     port           = 8080
-    v4_cidr_blocks = ["192.168.10.0/24", "192.168.20.0/24"]
+    v4_cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
     protocol       = "TCP"
-    port           = 4040
     v4_cidr_blocks = ["192.168.10.0/24", "192.168.20.0/24"]
+    port           = 5044
   }
 
-  ingress {
+  egress {
+    protocol       = "ANY"
+    port           = 80
+    v4_cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    protocol       = "ANY"
+    port           = 8080
+    v4_cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
     protocol       = "TCP"
-    port           = 9100
     v4_cidr_blocks = ["192.168.10.0/24", "192.168.20.0/24"]
+    port           = 5044
+  }
+
+  egress {
+    protocol       = "ANY"
+    port           = 10050
+    v4_cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
@@ -397,21 +482,52 @@ resource "yandex_vpc_security_group" "group-vm1-vm2" {
   }
 }
 
-
 #Security group zabbix 
 resource "yandex_vpc_security_group" "group-zabbix" {
   name       = "Security group zabbix"
   network_id = yandex_vpc_network.network-1.id
-  ingress {
-    protocol       = "ANY"
-    port           = 10050
-    v4_cidr_blocks = ["192.168.100.0/24", "192.168.101.0/24"]
+
+ ingress {
+    protocol       = "TCP"
+    port           = 8080
+    v4_cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
-    protocol       = "ANY"
+    protocol       = "TCP"
+    port           = 10050
+    v4_cidr_blocks = ["192.168.10.0/24", "192.168.20.0/24"]
+  }
+
+  ingress {
+    protocol       = "TCP"
     port           = 10051
     v4_cidr_blocks = ["192.168.10.0/24", "192.168.20.0/24"]
+  }
+
+ egress {
+    protocol       = "TCP"
+    port           = 8080
+    v4_cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    protocol       = "TCP"
+    port           = 10050
+    v4_cidr_blocks = ["192.168.10.0/24", "192.168.20.0/24"]
+  }
+
+  egress {
+    protocol       = "TCP"
+    port           = 10051
+    v4_cidr_blocks = ["192.168.10.0/24", "192.168.20.0/24"]
+  }
+
+  egress {
+    protocol       = "ANY"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+    from_port      = 0
+    to_port        = 65535
   }
 }
 
@@ -427,10 +543,36 @@ resource "yandex_vpc_security_group" "group-elasticsearch" {
     v4_cidr_blocks = ["192.168.10.0/24", "192.168.20.0/24"]
   }
 
+  ingress {
+    protocol       = "TCP"
+    v4_cidr_blocks = ["192.168.10.0/24", "192.168.20.0/24"]
+    port           = 5044
+  }
+
+#Нужен ли входящий кибаны для эластика?
+  ingress {
+    protocol       = "TCP"
+    port           = 5601
+    v4_cidr_blocks = ["192.168.10.0/24", "192.168.20.0/24"]
+  }
+
+  egress {
+    protocol       = "TCP"
+    v4_cidr_blocks = ["192.168.10.0/24", "192.168.20.0/24"]
+    port           = 5044
+  }
+
   egress {
     protocol       = "TCP"
     port           = 5601
     v4_cidr_blocks = ["192.168.10.0/24", "192.168.20.0/24"]
+  }
+
+  egress {
+    protocol       = "ANY"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+    from_port      = 0
+    to_port        = 65535
   }
 }
 
@@ -445,10 +587,35 @@ resource "yandex_vpc_security_group" "group-kibana" {
     v4_cidr_blocks = ["0.0.0.0/0"]
   }
 
+  ingress {
+    protocol       = "TCP"
+    v4_cidr_blocks = ["192.168.10.0/24", "192.168.20.0/24"]
+    port           = 5044
+  }
+
   egress {
     protocol       = "TCP"
-    port           = 9200
-    v4_cidr_blocks = ["192.168.30.22/32"]
+    port           = 5601
+    v4_cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    protocol       = "TCP"
+    v4_cidr_blocks = ["192.168.10.0/24", "192.168.20.0/24"]
+    port           = 5044
+  }
+
+  # egress {
+  #   protocol       = "TCP"
+  #   port           = 9200
+  #   v4_cidr_blocks = ["192.168.10.0/24", "192.168.20.0/24"]
+  # }
+
+  egress {
+    protocol       = "ANY"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+    from_port      = 0
+    to_port        = 65535
   }
 }
 
@@ -464,11 +631,29 @@ resource "yandex_vpc_security_group" "group-public-network-alb" {
     to_port        = 65535
   }
 
+  ingress {
+    protocol       = "TCP"
+    port           = 80
+    v4_cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    protocol          = "TCP"
+    description       = "healthchecks"
+    predefined_target = "loadbalancer_healthchecks"
+    port              = 30080
+  }
+
   egress {
     protocol       = "ANY"
     v4_cidr_blocks = ["0.0.0.0/0"]
     from_port      = 0
     to_port        = 65535
+  }
+
+  egress {
+    protocol       = "ANY"
+    v4_cidr_blocks = ["0.0.0.0/0"]
   }
 }
 

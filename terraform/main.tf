@@ -412,10 +412,9 @@ resource "yandex_vpc_security_group" "group-ssh-traffic" {
     v4_cidr_blocks = ["192.168.10.0/24", "192.168.20.0/24"]
   }
 
-  ingress {
-    protocol       = "ICMP"
-    from_port      = 0
-    to_port        = 65535
+  egress {
+    protocol       = "TCP"
+    port           = 22
     v4_cidr_blocks = ["192.168.10.0/24", "192.168.20.0/24"]
   }
 
@@ -439,15 +438,15 @@ resource "yandex_vpc_security_group" "group-vm1-vm2" {
   }
 
   ingress {
-    protocol       = "ANY"
-    port           = 8080
-    v4_cidr_blocks = ["0.0.0.0/0"]
+    protocol       = "TCP"
+    port           = 5044
+    v4_cidr_blocks = ["192.168.10.0/0", "192.168.20.0/0"]
   }
 
   ingress {
-    protocol       = "TCP"
-    v4_cidr_blocks = ["192.168.10.0/24", "192.168.20.0/24"]
-    port           = 5044
+    protocol       = "ANY"
+    port           = 10050
+    v4_cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
@@ -457,15 +456,9 @@ resource "yandex_vpc_security_group" "group-vm1-vm2" {
   }
 
   egress {
-    protocol       = "ANY"
-    port           = 8080
-    v4_cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
     protocol       = "TCP"
-    v4_cidr_blocks = ["192.168.10.0/24", "192.168.20.0/24"]
     port           = 5044
+    v4_cidr_blocks = ["192.168.10.0/0", "192.168.20.0/0"]
   }
 
   egress {
@@ -487,7 +480,7 @@ resource "yandex_vpc_security_group" "group-zabbix" {
   name       = "Security group zabbix"
   network_id = yandex_vpc_network.network-1.id
 
- ingress {
+  ingress {
     protocol       = "TCP"
     port           = 8080
     v4_cidr_blocks = ["0.0.0.0/0"]
@@ -505,7 +498,7 @@ resource "yandex_vpc_security_group" "group-zabbix" {
     v4_cidr_blocks = ["192.168.10.0/24", "192.168.20.0/24"]
   }
 
- egress {
+  egress {
     protocol       = "TCP"
     port           = 8080
     v4_cidr_blocks = ["0.0.0.0/0"]
@@ -523,12 +516,12 @@ resource "yandex_vpc_security_group" "group-zabbix" {
     v4_cidr_blocks = ["192.168.10.0/24", "192.168.20.0/24"]
   }
 
-  egress {
-    protocol       = "ANY"
-    v4_cidr_blocks = ["0.0.0.0/0"]
-    from_port      = 0
-    to_port        = 65535
-  }
+  # egress {
+  #   protocol       = "ANY"
+  #   v4_cidr_blocks = ["0.0.0.0/0"]
+  #   from_port      = 0
+  #   to_port        = 65535
+  # }
 }
 
 
@@ -544,36 +537,29 @@ resource "yandex_vpc_security_group" "group-elasticsearch" {
   }
 
   ingress {
-    protocol       = "TCP"
-    v4_cidr_blocks = ["192.168.10.0/24", "192.168.20.0/24"]
-    port           = 5044
-  }
-
-#Нужен ли входящий кибаны для эластика?
-  ingress {
-    protocol       = "TCP"
-    port           = 5601
-    v4_cidr_blocks = ["192.168.10.0/24", "192.168.20.0/24"]
+    protocol       = "ANY"
+    port           = 10050
+    v4_cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
     protocol       = "TCP"
-    v4_cidr_blocks = ["192.168.10.0/24", "192.168.20.0/24"]
-    port           = 5044
-  }
-
-  egress {
-    protocol       = "TCP"
-    port           = 5601
+    port           = 9200
     v4_cidr_blocks = ["192.168.10.0/24", "192.168.20.0/24"]
   }
 
   egress {
     protocol       = "ANY"
+    port           = 10050
     v4_cidr_blocks = ["0.0.0.0/0"]
-    from_port      = 0
-    to_port        = 65535
   }
+
+  # egress {
+  #   protocol       = "ANY"
+  #   v4_cidr_blocks = ["0.0.0.0/0"]
+  #   from_port      = 0
+  #   to_port        = 65535
+  # }
 }
 
 # Security group kibana
@@ -588,9 +574,9 @@ resource "yandex_vpc_security_group" "group-kibana" {
   }
 
   ingress {
-    protocol       = "TCP"
-    v4_cidr_blocks = ["192.168.10.0/24", "192.168.20.0/24"]
-    port           = 5044
+    protocol       = "ANY"
+    port           = 10050
+    v4_cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
@@ -600,23 +586,17 @@ resource "yandex_vpc_security_group" "group-kibana" {
   }
 
   egress {
-    protocol       = "TCP"
-    v4_cidr_blocks = ["192.168.10.0/24", "192.168.20.0/24"]
-    port           = 5044
+    protocol       = "ANY"
+    port           = 10050
+    v4_cidr_blocks = ["0.0.0.0/0"]
   }
 
   # egress {
-  #   protocol       = "TCP"
-  #   port           = 9200
-  #   v4_cidr_blocks = ["192.168.10.0/24", "192.168.20.0/24"]
+  #   protocol       = "ANY"
+  #   v4_cidr_blocks = ["0.0.0.0/0"]
+  #   from_port      = 0
+  #   to_port        = 65535
   # }
-
-  egress {
-    protocol       = "ANY"
-    v4_cidr_blocks = ["0.0.0.0/0"]
-    from_port      = 0
-    to_port        = 65535
-  }
 }
 
 # Security group load balancer
@@ -637,19 +617,19 @@ resource "yandex_vpc_security_group" "group-public-network-alb" {
     v4_cidr_blocks = ["0.0.0.0/0"]
   }
 
-  ingress {
-    protocol          = "TCP"
-    description       = "healthchecks"
-    predefined_target = "loadbalancer_healthchecks"
-    port              = 30080
-  }
+  # ingress {
+  #   protocol          = "TCP"
+  #   description       = "healthchecks"
+  #   predefined_target = "loadbalancer_healthchecks"
+  #   port              = 30080
+  # }
 
-  egress {
-    protocol       = "ANY"
-    v4_cidr_blocks = ["0.0.0.0/0"]
-    from_port      = 0
-    to_port        = 65535
-  }
+  # egress {
+  #   protocol       = "ANY"
+  #   v4_cidr_blocks = ["0.0.0.0/0"]
+  #   from_port      = 0
+  #   to_port        = 65535
+  # }
 
   egress {
     protocol       = "ANY"

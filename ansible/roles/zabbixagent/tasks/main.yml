@@ -1,0 +1,29 @@
+---
+- name: Download zabbixagent
+  apt:
+    deb: "https://repo.zabbix.com/zabbix/6.4/ubuntu/pool/main/z/zabbix-release/zabbix-release_latest%2Bubuntu24.04_all.deb"
+
+- name: Update repository
+  apt:
+    update_cache: yes
+
+- name: Install zabbixagent
+  apt:
+    name: zabbix-agent
+    state: present
+
+- name: Copy zabbix_agentd config
+  template:
+    src: zabbix_agentd.conf
+    dest: /etc/zabbix/zabbix_agentd.conf
+    owner: root
+    group: root
+    mode: '0644'
+    backup: yes
+
+- name: Enable and restart zabbix agent
+  systemd:
+    name: zabbix-agent
+    enabled: true
+    masked: no
+    state: restarted

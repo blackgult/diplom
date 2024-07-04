@@ -1,1 +1,21 @@
+---
+- name: Install Kibana
+  become: true
+  apt:
+    deb: https://ftp.yandex.ru/mirrors/elastic/8/pool/main/k/kibana/kibana-8.0.0-amd64.deb
+    state: present
 
+- name: Copy Kibana config
+  template:
+    src: kibana.yml
+    dest: /etc/kibana/kibana.yml
+    mode: '0644'
+  # notify:
+  #   - Restart Kibana
+
+- name: Enable and restart kibana
+  systemd:
+    name: kibana
+    enabled: true
+    masked: no
+    state: restarted

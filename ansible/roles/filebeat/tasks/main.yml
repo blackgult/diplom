@@ -1,1 +1,26 @@
+---
+- name: Install Filebeat
+  become: true
+  apt:
+    deb: https://ftp.yandex.ru/mirrors/elastic/8/pool/main/f/filebeat/filebeat-8.0.0-amd64.deb
+    state: present
 
+- name: Copy Filebeat config
+  template:
+    src: filebeat.yml
+    dest: /etc/filebeat/filebeat.yml
+    mode: '0644'
+  # notify:
+  #   - Restart Filebeat
+
+- name: Restart nginx
+  service:
+    name: nginx
+    state: restarted
+
+- name: Enable and restart filebeat
+  systemd:
+    name: filebeat
+    enabled: true
+    masked: no
+    state: restarted

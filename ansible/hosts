@@ -12,4 +12,24 @@
     vm5-kibana ansible_host=vm5-kibana.ru-central1.internal
 
 [bastion]
-    vm6-bastion ansible_host=vm6-bastion.ru-central1.internal
+    vm6-bastion ansible_host=178.154.230.26
+
+[project:children]
+    web
+    zabbixserver
+    elasticsearch
+    kibana
+    bastion
+
+[project:vars]
+ansible_ssh_common_args="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand=\"ssh -o StrictHostKeyChecking=no -q \dmitrym@178.154.230.26 -o IdentityFile=/home/dmitrym/.ssh/id_ed25519 -o Port=22 -W %h:22\""
+
+
+# [project:vars]
+# ansible_ssh_common_args='-o ProxyCommand="ssh -q dmitrym@АЙПИАДРЕС -i /home/dmitrym/.ssh/id_ed25519 -W %h:%p"'
+
+[all:vars]
+ansible_connection='ssh'
+ansible_ssh_port='22'
+ansible_ssh_user='dmitrym'
+ansible_ssh_private_key_file='/home/dmitrym/.ssh/id_ed25519'

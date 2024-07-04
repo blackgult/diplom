@@ -1,90 +1,139 @@
-# - name: Update package cache
-#   apt:
-#     update_cache: yes
+---
+- name: create a directory
+  ansible.builtin.file:
+   path: /etc/zabbix-files
+   state: directory
+   mode: "0755"
 
-- name: Install nginx
+- name: download the zabbix
+  ansible.builtin.get_url:
+   url: "https://repo.zabbix.com/zabbix/6.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.0-4+ubuntu22.04_all.deb"
+   dest: /etc/zabbix-files
+  become: true
+
+- name: Download zabbix
   become: true
   apt:
-    name: nginx
-    state: present
-    update_cache: true
-    cache_valid_time: 3600
+    deb: https://repo.zabbix.com/zabbix/6.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.0-4+ubuntu20.04_all.deb
 
-- name: nginx enable
+- name: Apt update
+  apt:
+    force_apt_get: true
+    update_cache: yes
+    upgrade: dist
   become: true
+
+- name: Install zabbix
+  apt:
+    name:
+      - zabbix-server-mysql
+      - zabbix-frontend-php
+      - zabbix-nginx-conf
+      - zabbix-sql-scripts
+      - zabbix-agent
+  become: true
+
+
+- name: Install mysql database and dependencies
+  apt:
+    name:
+      - mysql-server
+      - python3-pip
+      - libmysqlclient-dev
+      - python3-dev
+      - python3-mysqldb
+    state: present
+  become: true
+
+- name: Enable and reload mysql
+  systemd:
+    name: mysql
+    enabled: true
+    masked: no
+    state: restarted
+  become: true
+
+- name: Create User
+  community.mysql.mysql_user:
+    name: zabbix
+    password: "{{password_db}}"
+    priv: "*.*:ALL,GRANT"
+    state: present
+
+- name: Create database for mysql
+  community.mysql.mysql_db:
+    name: zabbix
+    encoding: utf8mb4
+    collation: utf8mb4_bin
+    state: present
+
+- name: Search for server.sql
+  stat:
+    path: /usr/share/zabbix-sql-scripts/mysql/server.sql
+  register: result
+
+- name: Extract .gz into /tmp
+  ansible.builtin.shell:
+    cmd: gunzip /usr/share/zabbix-sql-scripts/mysql/server.sql.gz
+  when: not result.stat.exists
+
+- name: Import preset
+  community.mysql.mysql_db:
+    name: zabbix
+    state: import
+    target: /usr/share/zabbix-sql-scripts/mysql/server.sql
+  when: not result.stat.exists
+
+- name: Set new database password for mysql database
+  ansible.builtin.lineinfile:
+    path: /etc/zabbix/zabbix_server.conf
+    insertafter: "DBPassword="
+    line: DBPassword={{password_db}}
+
+# - name: replace zabbix config
+#   ansible.builtin.copy: 
+#     src: /home/dmitrym/diplom/ansible/roles/templates/nginx.conf
+#     dest: /etc/zabbix/
+
+- name: Copy nginx config
+  template:
+    src: nginx.conf
+    dest: /etc/zabbix/
+    owner: root
+    group: root
+    mode: '0644'
+    backup: yes
+
+- name: Enable and restart zabbix-server
+  systemd:
+    name: zabbix-server
+    enabled: true
+    masked: no
+    state: restarted
+  become: true
+
+- name: Enable and restart zabbix-agent
+  systemd:
+    name: zabbix-agent
+    enabled: true
+    masked: no
+    state: restarted
+  become: true
+
+- name: Enable and restart nginx
   systemd:
     name: nginx
     enabled: true
-
-- name: Install ufw
+    masked: no
+    state: restarted
   become: true
-  apt:
-    name: ufw
-    state: present
-    update_cache: true
-    cache_valid_time: 3600
 
-- name: Enable UFW
+- name: Enable and restart php
+  systemd:
+    name: php7.4-fpm
+    enabled: true
+    masked: no
+    state: restarted
   become: true
-  ufw:
-    state: enabled
 
-- name: Allow HTTP
-  ufw:
-    rule: allow
-    port: http
-    proto: tcp
-    state: enabled
-
-- name: Allow all access to tcp port 80
-  ufw:
-    rule: allow
-    port: '80'
-    proto: tcp
-
-- name: Reloaded UFW
-  become: true
-  ufw:
-    state: reloaded
-    
-- name: Install PostgreSQL
-  apt:
-    name: postgresql
-    state: present
-    update_cache: true
-    cache_valid_time: 3600
-
-- name: Install Zabbix Server
-  apt:
-    name: zabbix-server-pgsql
-    state: present
-    update_cache: true
-    cache_valid_time: 3600
-
-- name: Install Zabbix Agent
-  apt:
-    name: zabbix-agent
-    state: present
-
-- name: Create database and user for Zabbix
-  postgresql_db:
-    name: zabbix
-    login_user: postgres
-    login_password: postgres
-
-- name: Setting database for Zabbix Server
-  shell: zcat /usr/share/doc/zabbix-server-pgsql/create.sql.gz | psql -h localhost -d zabbix -U zabbix
-
-- name: Setting configure Zabbix Server
-  template:
-    src: /home/dmitrym/diplom/ansible/roles/zabbix-server/templates/zabbix_server.conf.j2
-    dest: /etc/zabbix/zabbix_server.conf
-    mode: 0555
-  notify: restart zabbix-server
-
-- name: Setting configure Zabbix Agent
-  template:
-    src: /home/dmitrym/diplom/ansible/roles/zabbix-server/templates/zabbix_agentd.conf.j2
-    dest: /etc/zabbix/zabbix_agentd.conf
-    mode: 0555
-  notify: restart zabbix-agent
+#8.1

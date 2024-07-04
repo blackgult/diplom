@@ -1,1 +1,22 @@
+---
+- name: Install elasticsearch
+  become: true
+  apt:
+    deb: https://ftp.yandex.ru/mirrors/elastic/8/pool/main/e/elasticsearch/elasticsearch-8.0.0-amd64.deb
+    state: present
 
+- name: Copy Elasticsearch config
+  template:
+    src: elasticsearch.yml
+    dest: /etc/elasticsearch/elasticsearch.yml
+    mode: '0644'
+  # notify:
+  #   - Restart Elasticsearch
+
+
+- name: Enable and restart elasticsearch
+  systemd:
+    name: elasticsearch
+    enabled: true
+    masked: no
+    state: restarted

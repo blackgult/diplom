@@ -1,9 +1,10 @@
 ---
 - name: deploy zabbixserver
   hosts: zabbixserver
+  remote_user: dmitrym
   become: true
   vars:
-    postgres_password: postgres
+    - password_db: dmitrym
   roles:
     - zabbixserver
 

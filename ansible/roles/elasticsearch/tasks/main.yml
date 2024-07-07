@@ -6,16 +6,17 @@
     state: present
 
 - name: Copy Elasticsearch config
-  template:
-    src: elasticsearch.yml
+  become: true
+  copy:
+    src: /home/dmitrym/diplom/ansible/roles/elasticsearch/templates/elasticsearch.yml
     dest: /etc/elasticsearch/elasticsearch.yml
-    mode: '0644'
-  # notify:
-  #   - Restart Elasticsearch
-
+    mode: 0644
+    owner: dmitrym
+    group: root
 
 - name: Enable and restart elasticsearch
-  systemd:
+  become: true
+  ansible.builtin.systemd:
     name: elasticsearch
     enabled: true
     masked: no

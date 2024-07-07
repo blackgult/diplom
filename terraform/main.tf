@@ -118,6 +118,7 @@ resource "yandex_compute_instance" "vm3-zabbix-server" {
     subnet_id          = yandex_vpc_subnet.subnet-1.id
     nat                = true
     security_group_ids = [yandex_vpc_security_group.group-ssh-traffic.id, yandex_vpc_security_group.group-zabbix.id]
+    ip_address         = "192.168.10.3"
   }
 
   metadata = {
@@ -156,6 +157,7 @@ resource "yandex_compute_instance" "vm4-elasticsearch" {
     subnet_id          = yandex_vpc_subnet.subnet-1.id
     nat                = false #фолс чтобы не натила
     security_group_ids = [yandex_vpc_security_group.group-ssh-traffic.id, yandex_vpc_security_group.group-elasticsearch.id, yandex_vpc_security_group.group-kibana.id]
+    ip_address         = "192.168.10.4"
   }
 
   metadata = {
@@ -194,6 +196,7 @@ resource "yandex_compute_instance" "vm5-kibana" {
     subnet_id          = yandex_vpc_subnet.subnet-1.id
     nat                = true
     security_group_ids = [yandex_vpc_security_group.group-ssh-traffic.id, yandex_vpc_security_group.group-kibana.id, yandex_vpc_security_group.group-elasticsearch.id]
+    ip_address         = "192.168.10.5"
   }
 
   metadata = {

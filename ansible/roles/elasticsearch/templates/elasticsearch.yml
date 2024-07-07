@@ -14,13 +14,13 @@
 #
 # Use a descriptive name for your cluster:
 #
-#cluster.name: my-application
+cluster.name: my-application
 #
 # ------------------------------------ Node ------------------------------------
 #
 # Use a descriptive name for the node:
 #
-#node.name: node-1
+node.name: single-node
 #
 # Add custom attributes to the node:
 #
@@ -53,7 +53,8 @@ path.logs: /var/log/elasticsearch
 # By default Elasticsearch is only accessible on localhost. Set a different
 # address here to expose this node on the network:
 #
-network.host: 0.0.0.0
+network.host: 192.168.10.4
+
 #
 # By default Elasticsearch listens for HTTP traffic on the first free port it
 # finds starting at 9200. Set a specific HTTP port here:
@@ -67,8 +68,7 @@ http.port: 9200
 # Pass an initial list of hosts to perform discovery when this node is started:
 # The default list of hosts is ["127.0.0.1", "[::1]"]
 #
-discovery.seed_hosts: ["127.0.0.1"]
-discovery.type: single-node
+#discovery.seed_hosts: ["host1", "host2"]
 #
 # Bootstrap the cluster using an initial set of master-eligible nodes:
 #
@@ -91,7 +91,9 @@ discovery.type: single-node
 # This means that users don’t have to provide credentials and can get full access
 # to the cluster. Network connections are also not encrypted.
 #
-# To protect your data, we strongly encourage you to enable the Elasticsearch security features.
+# To protect your data, we strongly encourage you to enable the Elasticsearch security features. 
 # Refer to the following documentation for instructions.
 #
 # https://www.elastic.co/guide/en/elasticsearch/reference/7.16/configuring-stack-security.html
+discovery.type: single-node
+discovery.seed_hosts: ["127.0.0.1"]

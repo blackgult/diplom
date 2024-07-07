@@ -10,7 +10,7 @@
   <p>Hostname is {{ ansible_hostname }}.</p>
   <p>Информация о CPU: {{ ansible_processor }}.</p>
   <p>Информация о RAM: {{ ansible_memory_mb }}.</p>
-  <p>Информация о величине первого HDD: {{ ansible_facts['devices']['sda']['size']}}.</p>
+  <p>Информация о devices: {{ ansible_facts['devices']}}.</p>
   <p>Информация о IP-адресе: {{ ansible_all_ipv4_addresses }}.</p>
  </body>
 </html>

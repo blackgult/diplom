@@ -15,12 +15,25 @@ setup.template.settings:
   index.number_of_shards: 1
   #index.codec: best_compression
   #_source.enabled: false
+
+# ================================= Dashboards =================================
+# These settings control loading the sample dashboards to the Kibana index. Loading
+# the dashboards is disabled by default and can be enabled either by setting the
+# options here or by using the `setup` command.
+setup.dashboards.enabled: true
+
+# The URL from where to download the dashboards archive. By default this URL
+# has a value which is computed based on the Beat name and version. For released
+# versions, this URL points to the dashboard archive on the artifacts.elastic.co
+# website.
+#setup.dashboards.url:
+
 #============================== Kibana =====================================
 
 # Starting with Beats version 6.0.0, the dashboards are loaded via the Kibana API.
 # This requires a Kibana endpoint configuration.
 setup.kibana:
-  host: "vm5-kibana.ru-central1.internal:5601"
+  host: "192.168.10.5:5601"
 
 #================================ Outputs =====================================
 
@@ -29,7 +42,7 @@ setup.kibana:
 #-------------------------- Elasticsearch output ------------------------------
 output.elasticsearch:
   # Array of hosts to connect to.
-  hosts: ["vm4-elasticsearch.ru-central1.internal:9200"]
+  hosts: ["192.168.10.4:9200"]
   allow_older_versions: true
   # Optional protocol and basic auth credentials.
   #protocol: "https"

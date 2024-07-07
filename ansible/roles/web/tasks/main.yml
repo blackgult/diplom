@@ -11,20 +11,23 @@
     cache_valid_time: 3600
 
 - name: Change index.html file
+  become: true
   template:
     src: /home/dmitrym/diplom/ansible/roles/web/templates/index.html.j2
     dest: /var/www/html/index.html
     mode: 0555
-#  notify: Restart nginx
+  # notify: Restart nginx
 
 - name: Change nginx.conf file
-  template:
-    src: nginx.conf
+  become: true
+  copy:
+    src: /home/dmitrym/diplom/ansible/roles/web/templates/nginx.conf
     dest: /etc/nginx/nginx.conf
-    mode: 0555
+    mode: 0644
 
 - name: Enable and restart nginx
-  systemd:
+  become: true
+  ansible.builtin.systemd:
     name: nginx
     enabled: true
     masked: no

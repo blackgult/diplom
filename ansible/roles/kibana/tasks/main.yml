@@ -6,12 +6,13 @@
     state: present
 
 - name: Copy Kibana config
-  template:
-    src: kibana.yml
+  become: true
+  copy:
+    src: /home/dmitrym/diplom/ansible/roles/kibana/templates/kibana.yml
     dest: /etc/kibana/kibana.yml
-    mode: '0644'
-  # notify:
-  #   - Restart Kibana
+    mode: 0644
+    owner: dmitrym
+    group: root
 
 - name: Enable and restart kibana
   systemd:

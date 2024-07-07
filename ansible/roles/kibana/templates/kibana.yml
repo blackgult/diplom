@@ -1,7 +1,7 @@
 server.port: 5601
-server.host: 0.0.0.0
+server.host: 192.168.10.5
 server.ssl.enabled: false
 server.name: "vm5-kibana.ru-central1.internal"
 
-elasticsearch.hosts: ['http://vm4-elasticsearch.ru-central1.internal:9200']
+elasticsearch.hosts: http://192.168.10.4:9200
 elasticsearch.ssl.verificationMode: "none"

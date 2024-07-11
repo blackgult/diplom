@@ -3,7 +3,7 @@
 
 ==========
 
-## Требования к дипломной работе по ссылке (https://github.com/netology-code/sys-diplom)
+## Требования к дипломной работе по [ссылке](https://github.com/netology-code/sys-diplom)
 
 ==========
 
@@ -12,6 +12,7 @@
 ## Инфраструктура
 Для развёртки инфраструктуры используется [terraform](https://github.com/blackgult/diplom/tree/main/terraform) и [ansible](https://github.com/blackgult/diplom/tree/main/ansible).  
 
+Для ansible использованы fqdn имена виртуальных машин - файл [ansible host](https://github.com/blackgult/diplom/blob/main/ansible/hosts)
 Не используйте для ansible inventory ip-адреса! Вместо этого используйте fqdn имена виртуальных машин в зоне ".ru-central1.internal". Пример: example.ru-central1.internal  
 
 Важно: используйте по-возможности **минимальные конфигурации ВМ**:2 ядра 20% Intel ice lake, 2-4Гб памяти, 10hdd, прерываемая. 

@@ -86,7 +86,7 @@ Cоздайте ВМ, разверните на ней Elasticsearch. Устан
 #  РЕШЕНИЕ
 
 ## Инфраструктура
-Для развёртки инфраструктуры используется [terraform]([#terraform](https://github.com/blackgult/diplom/tree/main/terraform)) и [ansible]([(#ansible)](https://github.com/blackgult/diplom/tree/main/ansible)).  
+Для развёртки инфраструктуры используется terraform [#terraform](https://github.com/blackgult/diplom/tree/main/terraform) и [(#ansible)](https://github.com/blackgult/diplom/tree/main/ansible).  
 
 Не используйте для ansible inventory ip-адреса! Вместо этого используйте fqdn имена виртуальных машин в зоне ".ru-central1.internal". Пример: example.ru-central1.internal  
 

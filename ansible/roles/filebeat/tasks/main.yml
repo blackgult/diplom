@@ -2,16 +2,14 @@
 - name: Install Filebeat
   become: true
   apt:
-    deb: https://ftp.yandex.ru/mirrors/elastic/8/pool/main/f/filebeat/filebeat-8.0.0-amd64.deb
+    deb: https://mirror.yandex.ru/mirrors/elastic/7/pool/main/f/filebeat/filebeat-7.17.14-amd64.deb
     state: present
 
-# - name: Copy Filebeat config
-#   template:
-#     src: filebeat.yml
-#     dest: /etc/filebeat/filebeat.yml
-#     mode: '0644'
-  # notify:
-  #   - Restart Filebeat
+- name: Systemctl daemon reload
+  systemd:
+    daemon_reload: true
+    name: filebeat.service
+    state: started
 
 - name: Copy Filebeat config
   become: true
@@ -19,6 +17,8 @@
     src: /home/dmitrym/diplom/ansible/roles/filebeat/templates/filebeat.yml
     dest: /etc/filebeat/filebeat.yml
     mode: 0644
+    owner: dmitrym
+    group: root
 
 - name: Restart nginx
   service:
@@ -27,7 +27,7 @@
 
 - name: Enable and restart filebeat
   systemd:
-    name: filebeat
+    name: filebeat.service
     enabled: true
     masked: no
     state: restarted

@@ -16,7 +16,6 @@
     src: /home/dmitrym/diplom/ansible/roles/web/templates/index.html.j2
     dest: /var/www/html/index.html
     mode: 0555
-  # notify: Restart nginx
 
 - name: Change nginx.conf file
   become: true

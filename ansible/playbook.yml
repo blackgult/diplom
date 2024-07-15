@@ -1,12 +1,12 @@
 ---
-# - name: deploy zabbixserver
-#   hosts: zabbixserver
-#   remote_user: dmitrym
-#   become: true
-#   vars:
-#     - password_db: dmitrym
-#   roles:
-#     - zabbixserver
+- name: deploy zabbixserver
+  hosts: zabbixserver
+  remote_user: dmitrym
+  become: true
+  vars:
+    - password_db: dmitrym
+  roles:
+    - zabbixserver
 
 - name: deploy elasticsearch
   hosts: elasticsearch
@@ -14,26 +14,22 @@
   roles:
     - elasticsearch
 
-# - name: deploy kibana
-#   hosts: kibana
-#   become: true
-#   roles:
-#     - kibana
+- name: deploy kibana
+  hosts: kibana
+  become: true
+  roles:
+    - kibana
 
-# - name: deploy web servers
-#   hosts: web
-#   become: true
-#   roles:
-#     - web
-#     - filebeat
+- name: deploy web servers
+  hosts: web
+  become: true
+  roles:
+    - web
+    - filebeat
 
-
-# - name: deploy zabbixagent
-#   hosts:
-#     - web
-#     # - elasticsearch
-#     # - kibana
-#     # - bastion
-#   become: true
-  # roles:
-  #   - zabbixagent
+- name: deploy zabbixagent
+  hosts:
+    - web
+  become: true
+  roles:
+    - zabbixagent

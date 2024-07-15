@@ -2,8 +2,14 @@
 - name: Install Kibana
   become: true
   apt:
-    deb: https://ftp.yandex.ru/mirrors/elastic/8/pool/main/k/kibana/kibana-8.0.0-amd64.deb
+    deb: https://mirror.yandex.ru/mirrors/elastic/7/pool/main/k/kibana/kibana-7.17.14-amd64.deb
     state: present
+
+- name: Systemctl daemon reload
+  systemd:
+    daemon_reload: true
+    name: kibana.service
+    state: started
 
 - name: Copy Kibana config
   become: true
@@ -16,7 +22,7 @@
 
 - name: Enable and restart kibana
   systemd:
-    name: kibana
+    name: kibana.service
     enabled: true
     masked: no
     state: restarted

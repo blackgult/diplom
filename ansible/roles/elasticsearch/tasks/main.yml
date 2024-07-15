@@ -1,9 +1,21 @@
 ---
+# - name: Install java
+#   become: true
+#   apt:
+#     name: openjdk-19-jre-headless #openjdk-11-jdk
+#     state: latest
+
 - name: Install elasticsearch
   become: true
   apt:
-    deb: https://ftp.yandex.ru/mirrors/elastic/8/pool/main/e/elasticsearch/elasticsearch-8.0.0-amd64.deb
+    deb: https://mirror.yandex.ru/mirrors/elastic/7/pool/main/e/elasticsearch/elasticsearch-7.17.14-amd64.deb
     state: present
+
+- name: Systemctl daemon reload
+  systemd:
+    daemon_reload: true
+    name: elasticsearch.service
+    state: started
 
 - name: Copy Elasticsearch config
   become: true
@@ -17,7 +29,7 @@
 - name: Enable and restart elasticsearch
   become: true
   ansible.builtin.systemd:
-    name: elasticsearch
+    name: elasticsearch.service
     enabled: true
     masked: no
     state: restarted

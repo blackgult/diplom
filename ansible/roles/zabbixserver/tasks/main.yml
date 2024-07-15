@@ -43,7 +43,6 @@
       - zabbix-agent
   become: true
 
-
 - name: Install mysql database and dependencies
   apt:
     name:
@@ -107,7 +106,6 @@
     dest: /etc/zabbix/
     # dest: /etc/nginx/nginx.conf
     mode: 0644
-
 
 - name: Enable and restart zabbix-server
   systemd:

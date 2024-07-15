@@ -5,6 +5,4 @@ users:
     shell: /bin/bash
     sudo: ['ALL=(ALL) NOPASSWD:ALL']
     ssh-authorized-keys:
-      ssh-ed25519 #ключ
-
-      
+      ssh-ed25519 #ключик-ключик dmitrym@dmitrym-VirtualBox

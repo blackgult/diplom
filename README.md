@@ -74,7 +74,7 @@ Cоздайте ВМ, разверните на ней Elasticsearch. Устан
 
 Создайте ВМ, разверните на ней Kibana, сконфигурируйте соединение с Elasticsearch.
 
-Kibana доступна по ссылке [МояКибана](http://158.160.61.217:5601/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:'2024-07-16T04:43:08.181Z',to:now))&_a=(columns:!(),filters:!(),index:'filebeat-*',interval:auto,query:(language:kuery,query:''),sort:!(!('@timestamp',desc))))
+Kibana доступна по ссылке (http://158.160.61.217:5601/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:'2024-07-16T04:43:08.181Z',to:now))&_a=(columns:!(),filters:!(),index:'filebeat-*',interval:auto,query:(language:kuery,query:''),sort:!(!('@timestamp',desc))))
 
 Скриншот кибаны:
 ![9](https://github.com/blackgult/diplom/blob/main/pic/9.PNG)

@@ -104,3 +104,29 @@ Kibana доступна по ссылке [([http://158.160.61.217:5601/app/disc
 
 ![12](https://github.com/blackgult/diplom/blob/main/pic/12.PNG)
 
+
+### Дополнительные скриншоты
+
+anspingpong
+![anspingpong](https://github.com/blackgult/diplom/blob/main/pic/anspingpong.PNG)
+
+sshconnect - я ходил на машины используя команду ssh -A -J dmitrym@158.160.45.144 dmitrym@vm1-nginx1 (и далее аналогично на каждую машину)
+![sshconnect](https://github.com/blackgult/diplom/blob/main/pic/sshconnect.PNG)
+
+vm1statusfilebeat
+![vm1statusfilebeat](https://github.com/blackgult/diplom/blob/main/pic/vm1statusfilebeat.PNG)
+
+vm1statusnginx
+![vm1statusnginx](https://github.com/blackgult/diplom/blob/main/pic/vm1statusnginx.PNG)
+
+vm2statusfilebeat
+![vm2statusfilebeat](https://github.com/blackgult/diplom/blob/main/pic/vm2statusfilebeat.PNG)
+
+vm2statusnginx
+![vm2statusnginx](https://github.com/blackgult/diplom/blob/main/pic/vm2statusnginx.PNG)
+
+vm4elastic
+![vm4elastic](https://github.com/blackgult/diplom/blob/main/pic/vm4elastic.PNG)
+
+
+

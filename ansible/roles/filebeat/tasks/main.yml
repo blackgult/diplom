@@ -17,7 +17,7 @@
     src: /home/dmitrym/diplom/ansible/roles/filebeat/templates/filebeat.yml
     dest: /etc/filebeat/filebeat.yml
     mode: 0644
-    owner: dmitrym
+    owner: root
     group: root
 
 - name: Restart nginx

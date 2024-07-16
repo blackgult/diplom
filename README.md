@@ -29,7 +29,7 @@
 
 ![2](https://github.com/blackgult/diplom/blob/main/pic/2.PNG)
 
-Создайте [Backend Group](https://cloud.yandex.com/docs/application-load-balancer/concepts/backend-group), настройте backends на target group, ранее созданную. Настройте healthcheck на корень (/) и порт 80, протокол HTTP. - нвстройки бэкэнд группы написаны в файле main.tf терраформа
+Создайте [Backend Group](https://cloud.yandex.com/docs/application-load-balancer/concepts/backend-group), настройте backends на target group, ранее созданную. Настройте healthcheck на корень (/) и порт 80, протокол HTTP. - настройки бэкэнд группы написаны в файле main.tf терраформа
 
 Создайте [HTTP router](https://cloud.yandex.com/docs/application-load-balancer/concepts/http-router). Путь укажите — /, backend group — созданную ранее.
 

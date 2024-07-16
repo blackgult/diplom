@@ -35,9 +35,9 @@ resource "yandex_compute_instance" "vm1-nginx1" {
   }
 
   #Прерываемость машины, заккоментировать перед отправкой работы
-  scheduling_policy {
-    preemptible = true
-  }
+  # scheduling_policy {
+  #   preemptible = true
+  # }
 
   #Эта машина в приватной сети
   network_interface {
@@ -72,9 +72,9 @@ resource "yandex_compute_instance" "vm2-nginx2" {
   }
 
   #Прерываемость машины, заккоментировать перед отправкой работы
-  scheduling_policy {
-    preemptible = true
-  }
+  # scheduling_policy {
+  #   preemptible = true
+  # }
 
   #Эта машина в приватной сети
   network_interface {
@@ -109,9 +109,9 @@ resource "yandex_compute_instance" "vm3-zabbix-server" {
   }
 
   #Прерываемость машины, заккоментировать перед отправкой работы
-  scheduling_policy {
-    preemptible = true
-  }
+  # scheduling_policy {
+  #   preemptible = true
+  # }
 
   #эта машина должна быть и в приватной и в публичной сети
   network_interface {
@@ -147,16 +147,16 @@ resource "yandex_compute_instance" "vm4-elasticsearch" {
   }
 
   #Прерываемость машины, заккоментировать перед отправкой работы
-  scheduling_policy {
-    preemptible = true
-  }
+  # scheduling_policy {
+  #   preemptible = true
+  # }
 
 
   #Эта машина в приватной сети
   network_interface {
     subnet_id          = yandex_vpc_subnet.subnet-1.id
     nat                = false #фолс чтобы не натила
-    security_group_ids = [yandex_vpc_security_group.group-ssh-traffic.id, yandex_vpc_security_group.group-elasticsearch.id, yandex_vpc_security_group.group-kibana.id]
+    security_group_ids = [yandex_vpc_security_group.group-ssh-traffic.id, yandex_vpc_security_group.group-elasticsearch.id]
     ip_address         = "192.168.10.4"
   }
 
@@ -187,15 +187,15 @@ resource "yandex_compute_instance" "vm5-kibana" {
   }
 
   #Прерываемость машины, заккоментировать перед отправкой работы
-  scheduling_policy {
-    preemptible = true
-  }
+  # scheduling_policy {
+  #   preemptible = true
+  # }
 
   #эта машина должна быть и в приватной и в публичной сети
   network_interface {
     subnet_id          = yandex_vpc_subnet.subnet-1.id
     nat                = true
-    security_group_ids = [yandex_vpc_security_group.group-ssh-traffic.id, yandex_vpc_security_group.group-kibana.id, yandex_vpc_security_group.group-elasticsearch.id]
+    security_group_ids = [yandex_vpc_security_group.group-ssh-traffic.id, yandex_vpc_security_group.group-kibana.id]
     ip_address         = "192.168.10.5"
   }
 
@@ -226,9 +226,9 @@ resource "yandex_compute_instance" "vm6-bastion" {
   }
 
   #Прерываемость машины, заккоментировать перед отправкой работы
-  scheduling_policy {
-    preemptible = true
-  }
+  # scheduling_policy {
+  #   preemptible = true
+  # }
 
   #эта машина должна быть и в приватной и в публичной сети
   network_interface {
@@ -449,7 +449,7 @@ resource "yandex_vpc_security_group" "group-vm1-vm2" {
   ingress {
     protocol       = "ANY"
     port           = 10050
-    v4_cidr_blocks = ["0.0.0.0/0"]
+    v4_cidr_blocks = ["192.168.10.0/24", "192.168.20.0/24"]
   }
 
   egress {
@@ -465,9 +465,21 @@ resource "yandex_vpc_security_group" "group-vm1-vm2" {
   }
 
   egress {
+    protocol       = "TCP"
+    port           = 5601
+    v4_cidr_blocks = ["192.168.10.0/24", "192.168.20.0/24"]
+  }
+
+  egress {
+    protocol       = "TCP"
+    port           = 9200
+    v4_cidr_blocks = ["192.168.10.0/24", "192.168.20.0/24"]
+  }
+
+  egress {
     protocol       = "ANY"
-    port           = 10050
-    v4_cidr_blocks = ["0.0.0.0/0"]
+    port           = 10051
+    v4_cidr_blocks = ["192.168.10.0/24", "192.168.20.0/24"]
   }
 
   egress {
@@ -539,22 +551,10 @@ resource "yandex_vpc_security_group" "group-elasticsearch" {
     v4_cidr_blocks = ["192.168.10.0/24", "192.168.20.0/24"]
   }
 
-  ingress {
-    protocol       = "ANY"
-    port           = 10050
-    v4_cidr_blocks = ["0.0.0.0/0"]
-  }
-
   egress {
     protocol       = "TCP"
-    port           = 9200
+    port           = 5601
     v4_cidr_blocks = ["192.168.10.0/24", "192.168.20.0/24"]
-  }
-
-  egress {
-    protocol       = "ANY"
-    port           = 10050
-    v4_cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
@@ -576,22 +576,10 @@ resource "yandex_vpc_security_group" "group-kibana" {
     v4_cidr_blocks = ["0.0.0.0/0"]
   }
 
-  ingress {
-    protocol       = "ANY"
-    port           = 10050
-    v4_cidr_blocks = ["0.0.0.0/0"]
-  }
-
   egress {
     protocol       = "TCP"
-    port           = 5601
-    v4_cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    protocol       = "ANY"
-    port           = 10050
-    v4_cidr_blocks = ["0.0.0.0/0"]
+    port           = 9200
+    v4_cidr_blocks = ["192.168.10.0/24", "192.168.20.0/24"]
   }
 
   egress {
@@ -689,30 +677,30 @@ output "external_ip_address_vm6-bastion" {
 }
 
 #СНАПШОТЫ ДИСКОВ
-# resource "yandex_compute_snapshot_schedule" "default" {
-#   name           = "snapshot"
+resource "yandex_compute_snapshot_schedule" "default" {
+  name           = "snapshot"
 
-#   schedule_policy {
-#   expression = "0 0 ? * *"
-#   }
+  schedule_policy {
+  expression = "0 0 ? * *"
+  }
 
-#   snapshot_count = 7
+  snapshot_count = 7
 
-#   snapshot_spec {
-#     description = "snapshot-description"
-#     labels = {
-#       snapshot-label = "my-snapshot-label-value"
-#     }
-#   }
+  snapshot_spec {
+    description = "snapshot-description"
+    labels = {
+      snapshot-label = "my-snapshot-label-value"
+    }
+  }
 
-#   labels = {
-#     my-label = "my-label-value"
-#   }
+  labels = {
+    my-label = "my-label-value"
+  }
 
-#   disk_ids = [yandex_compute_instance.vm1-nginx1.boot_disk.0.disk_id,
-#               yandex_compute_instance.vm2-nginx2.boot_disk.0.disk_id,
-#               yandex_compute_instance.vm3-zabbix-server.boot_disk.0.disk_id,
-#               yandex_compute_instance.vm4-elasticsearch.boot_disk.0.disk_id,
-#               yandex_compute_instance.vm5-kibana.boot_disk.0.disk_id,
-#               yandex_compute_instance.vm6-bastion.boot_disk.0.disk_id]
-# }
+  disk_ids = [yandex_compute_instance.vm1-nginx1.boot_disk.0.disk_id,
+              yandex_compute_instance.vm2-nginx2.boot_disk.0.disk_id,
+              yandex_compute_instance.vm3-zabbix-server.boot_disk.0.disk_id,
+              yandex_compute_instance.vm4-elasticsearch.boot_disk.0.disk_id,
+              yandex_compute_instance.vm5-kibana.boot_disk.0.disk_id,
+              yandex_compute_instance.vm6-bastion.boot_disk.0.disk_id]
+}

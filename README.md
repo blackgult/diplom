@@ -50,11 +50,10 @@
 
 ![6](https://github.com/blackgult/diplom/blob/main/pic/6.PNG)
 
-Сайт доступен по ссылке (http://158.160.137.195:80)
+Сайт доступен по ссылке (http://158.160.176.135:80)
 
 ![13](https://github.com/blackgult/diplom/blob/main/pic/13.PNG)
 
-![14](https://github.com/blackgult/diplom/blob/main/pic/14.PNG)
 
 ### Мониторинг
 Создайте ВМ, разверните на ней Zabbix. На каждую ВМ установите Zabbix Agent, настройте агенты на отправление метрик в Zabbix. 

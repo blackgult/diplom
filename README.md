@@ -25,16 +25,32 @@
 
 Настройка балансировщика:
 
-1. Создайте [Target Group](https://cloud.yandex.com/docs/application-load-balancer/concepts/target-group), включите в неё две созданных ВМ.
+Создайте [Target Group](https://cloud.yandex.com/docs/application-load-balancer/concepts/target-group), включите в неё две созданных ВМ.
 
-2. Создайте [Backend Group](https://cloud.yandex.com/docs/application-load-balancer/concepts/backend-group), настройте backends на target group, ранее созданную. Настройте healthcheck на корень (/) и порт 80, протокол HTTP.
+![2](https://github.com/blackgult/diplom/blob/main/pic/2.PNG)
 
-3. Создайте [HTTP router](https://cloud.yandex.com/docs/application-load-balancer/concepts/http-router). Путь укажите — /, backend group — созданную ранее.
+Создайте [Backend Group](https://cloud.yandex.com/docs/application-load-balancer/concepts/backend-group), настройте backends на target group, ранее созданную. Настройте healthcheck на корень (/) и порт 80, протокол HTTP.
 
-4. Создайте [Application load balancer](https://cloud.yandex.com/en/docs/application-load-balancer/) для распределения трафика на веб-сервера, созданные ранее. Укажите HTTP router, созданный ранее, задайте listener тип auto, порт 80.
+![3](https://github.com/blackgult/diplom/blob/main/pic/3.PNG)
+
+Создайте [HTTP router](https://cloud.yandex.com/docs/application-load-balancer/concepts/http-router). Путь укажите — /, backend group — созданную ранее.
+
+![4](https://github.com/blackgult/diplom/blob/main/pic/4.PNG)
+
+Создайте [Application load balancer](https://cloud.yandex.com/en/docs/application-load-balancer/) для распределения трафика на веб-сервера, созданные ранее. Укажите HTTP router, созданный ранее, задайте listener тип auto, порт 80.
+
+![5](https://github.com/blackgult/diplom/blob/main/pic/5.PNG)
 
 Протестируйте сайт
 `curl -v <публичный IP балансера>:80` 
+
+![6](https://github.com/blackgult/diplom/blob/main/pic/6.PNG)
+
+![7](https://github.com/blackgult/diplom/blob/main/pic/7.PNG)
+
+![8](https://github.com/blackgult/diplom/blob/main/pic/8.PNG)
+
+![9](https://github.com/blackgult/diplom/blob/main/pic/9.PNG)
 
 ### Мониторинг
 Создайте ВМ, разверните на ней Zabbix. На каждую ВМ установите Zabbix Agent, настройте агенты на отправление метрик в Zabbix. 

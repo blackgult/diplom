@@ -10,18 +10,20 @@
 #  РЕШЕНИЕ
 
 ## Инфраструктура
-Для развёртки инфраструктуры используется [terraform](https://github.com/blackgult/diplom/tree/main/terraform) и [ansible](https://github.com/blackgult/diplom/tree/main/ansible).  
+Для развёртки инфраструктуры используется [terraform - код доступен по ссылке](https://github.com/blackgult/diplom/tree/main/terraform) и [ansible - код доступен по ссылке](https://github.com/blackgult/diplom/tree/main/ansible).  
 
-Для ansible использованы fqdn имена виртуальных машин - файл [ansible host](https://github.com/blackgult/diplom/blob/main/ansible/hosts)
+Для ansible использованы fqdn имена виртуальных машин - [файл ansible host](https://github.com/blackgult/diplom/blob/main/ansible/hosts)
 
 ### Сайт
 Создайте две ВМ в разных зонах, установите на них сервер nginx, если его там нет. ОС и содержимое ВМ должно быть идентичным, это будут наши веб-сервера.
 
-![1](https://github.com/blackgult/diplom/blob/main/pic/1.PNG)
-
 Используйте набор статичных файлов для сайта. Можно переиспользовать сайт из домашнего задания.
 
 Виртуальные машины не должны обладать внешним Ip-адресом, те находится во внутренней сети. Доступ к ВМ по ssh через бастион-сервер. Доступ к web-порту ВМ через балансировщик yandex cloud.
+
+Созданные мной машины:
+
+![1](https://github.com/blackgult/diplom/blob/main/pic/1.PNG)
 
 Настройка балансировщика:
 
@@ -30,6 +32,8 @@
 ![2](https://github.com/blackgult/diplom/blob/main/pic/2.PNG)
 
 Создайте [Backend Group](https://cloud.yandex.com/docs/application-load-balancer/concepts/backend-group), настройте backends на target group, ранее созданную. Настройте healthcheck на корень (/) и порт 80, протокол HTTP. - настройки бэкэнд группы написаны в файле main.tf терраформа
+
+![backend](https://github.com/blackgult/diplom/blob/main/pic/backend.PNG)
 
 Создайте [HTTP router](https://cloud.yandex.com/docs/application-load-balancer/concepts/http-router). Путь укажите — /, backend group — созданную ранее.
 

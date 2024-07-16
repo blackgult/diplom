@@ -46,14 +46,27 @@
 
 ![6](https://github.com/blackgult/diplom/blob/main/pic/6.PNG)
 
-![7](https://github.com/blackgult/diplom/blob/main/pic/7.PNG)
+Сайт доступен по ссылке (http://158.160.137.195:80)
 
-![8](https://github.com/blackgult/diplom/blob/main/pic/8.PNG)
+
+
 
 ### Мониторинг
 Создайте ВМ, разверните на ней Zabbix. На каждую ВМ установите Zabbix Agent, настройте агенты на отправление метрик в Zabbix. 
 
 Настройте дешборды с отображением метрик, минимальный набор — по принципу USE (Utilization, Saturation, Errors) для CPU, RAM, диски, сеть, http запросов к веб-серверам. Добавьте необходимые tresholds на соответствующие графики.
+
+Заббикс доступен по ссылке
+
+Имя: Admin
+
+Пароль: zabbix
+
+Отслеживаемые хосты:
+![7](https://github.com/blackgult/diplom/blob/main/pic/7.PNG)
+
+Настроенные дашборды
+![8](https://github.com/blackgult/diplom/blob/main/pic/8.PNG)
 
 ### Логи
 Cоздайте ВМ, разверните на ней Elasticsearch. Установите filebeat в ВМ к веб-серверам, настройте на отправку access.log, error.log nginx в Elasticsearch.
@@ -62,6 +75,8 @@ Cоздайте ВМ, разверните на ней Elasticsearch. Устан
 
 Kibana доступна по ссылке [МояКибана](http://158.160.61.217:5601/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:'2024-07-16T04:43:08.181Z',to:now))&_a=(columns:!(),filters:!(),index:'filebeat-*',interval:auto,query:(language:kuery,query:''),sort:!(!('@timestamp',desc))))
 
+Скриншот кибаны:
+![9](https://github.com/blackgult/diplom/blob/main/pic/9.PNG)
 
 ### Сеть
 Разверните один VPC. Сервера web, Elasticsearch поместите в приватные подсети. Сервера Zabbix, Kibana, application load balancer определите в публичную подсеть.

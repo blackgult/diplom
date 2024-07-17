@@ -52,6 +52,8 @@
 
 Сайт доступен по ссылке (http://158.160.176.135:80)
 
+![14](https://github.com/blackgult/diplom/blob/main/pic/14.PNG)
+
 ![13](https://github.com/blackgult/diplom/blob/main/pic/13.PNG)
 
 

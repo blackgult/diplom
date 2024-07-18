@@ -162,4 +162,4 @@ _Но вот это надо зашифровать через ansible-vault - p
 ![ispravlenie3](https://github.com/blackgult/diplom/blob/main/pic/ispravlenie3.PNG)
 
 
-Исправленный файл playbook.yml доступен по ссылке - https://github.com/blackgult/diplom/blob/main/ansible/playbook.yml
+### Исправленный файл playbook.yml доступен по ссылке - https://github.com/blackgult/diplom/blob/main/ansible/playbook.yml

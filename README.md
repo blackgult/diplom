@@ -137,5 +137,17 @@ vm4elastic
 
 ![vm4elastic](https://github.com/blackgult/diplom/blob/main/pic/vm4elastic.PNG)
 
+#  ПРАВКИ
+
+_Но вот это надо зашифровать через ansible-vault - password_db: dmitrym_
+
+Шифрование пароля я сделал таким образом:
 
 
+
+
+ansible-playbook playbook.yml --ask-vault-pass
+
+
+
+Исправленный файл playbook.yml доступен по ссылке - https://github.com/blackgult/diplom/blob/main/ansible/playbook.yml

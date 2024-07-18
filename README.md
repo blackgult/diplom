@@ -161,7 +161,7 @@ _Но вот это надо зашифровать через ansible-vault - p
 ![ispravlenie2](https://github.com/blackgult/diplom/blob/main/pic/ispravlenie2.PNG)
 
 
-Для того чтобы плебук сделал плэй успешно необходимо ввести команду ansible-playbook playbook.yml --ask-vault-pass нажать клафишу enter и ввести пароль от секрета
+Для того чтобы плебук сделал плэй успешно необходимо ввести команду ansible-playbook playbook.yml --ask-vault-pass нажать клавишу enter и ввести пароль от секрета
 
 ![ispravlenie3](https://github.com/blackgult/diplom/blob/main/pic/ispravlenie3.PNG)
 

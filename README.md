@@ -143,18 +143,23 @@ _Но вот это надо зашифровать через ansible-vault - p
 
 Шифрование пароля я сделал таким образом:
 
+Сначала ввёл команду ansible-vault encrypt_string
+Потом ввёл пароль New Vault password: (не dmitrym, другой пароль))))))
+Потом ввёл пароль ещё раз Confirm New Vault password: 
+Потом ввёл строку dmitrym, потому что dmitrym мне надо зашифровать. Обязательно для завершения ввода необходимо нажимать ctrl-d. 
+
+Результат на скриншоте:
 
 ![ispravlenie1](https://github.com/blackgult/diplom/blob/main/pic/ispravlenie1.PNG)
 
 
+Потом я этот секрет добавил в свой файл playbook.yml
+
 ![ispravlenie2](https://github.com/blackgult/diplom/blob/main/pic/ispravlenie2.PNG)
 
 
-
+Для того чтобы плебук сделал плэй успешно необходимо ввести команду ansible-playbook playbook.yml --ask-vault-pass нажать клафишу enter и ввести пароль от секрета
 ![ispravlenie3](https://github.com/blackgult/diplom/blob/main/pic/ispravlenie3.PNG)
-
-ansible-playbook playbook.yml --ask-vault-pass
-
 
 
 Исправленный файл playbook.yml доступен по ссылке - https://github.com/blackgult/diplom/blob/main/ansible/playbook.yml

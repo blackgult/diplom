@@ -144,7 +144,14 @@ _Но вот это надо зашифровать через ansible-vault - p
 Шифрование пароля я сделал таким образом:
 
 
+![ispravlenie1](https://github.com/blackgult/diplom/blob/main/pic/ispravlenie1.PNG)
 
+
+![ispravlenie2](https://github.com/blackgult/diplom/blob/main/pic/ispravlenie2.PNG)
+
+
+
+![ispravlenie3](https://github.com/blackgult/diplom/blob/main/pic/ispravlenie3.PNG)
 
 ansible-playbook playbook.yml --ask-vault-pass
 
